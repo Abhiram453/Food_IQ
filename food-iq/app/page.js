@@ -167,7 +167,7 @@ export default function Home() {
             transition={{ delay: 0.3 }}
             className="text-lg sm:text-xl md:text-2xl text-slate-300 mb-2"
           >
-            Your AI ingredient co-pilot
+            Smart insights for smarter eating
           </motion.p>
           
           <motion.p 
