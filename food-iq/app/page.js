@@ -120,9 +120,9 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen relative overflow-hidden noise-overlay">
-      {/* Background pattern */}
-      <div className="absolute inset-0 dot-pattern opacity-30" />
+    <main className="min-h-screen relative overflow-hidden">
+      {/* Background with food image */}
+      <div className="absolute inset-0 bg-[#1a1f2e]/75" />
       
       {/* Animated background orbs */}
       <div className="orb orb-1" />

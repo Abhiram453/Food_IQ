@@ -435,8 +435,8 @@ export default function AnalyzePage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen relative overflow-hidden bg-[#1a1f2e] noise-overlay">
-        <div className="absolute inset-0 dot-pattern opacity-30" />
+      <main className="min-h-screen relative overflow-hidden">
+        <div className="absolute inset-0 bg-[#1a1f2e]/75" />
         <div className="orb orb-1" />
         <div className="orb orb-2" />
         <div className="orb orb-3" />
@@ -447,28 +447,31 @@ export default function AnalyzePage() {
 
   if (error) {
     return (
-      <main className="min-h-screen relative overflow-hidden flex items-center justify-center bg-[#1a1f2e]">
+      <main className="min-h-screen relative overflow-hidden">
+        <div className="absolute inset-0 bg-[#1a1f2e]/75" />
         <div className="orb orb-1" />
         <div className="orb orb-2" />
         <div className="orb orb-3" />
-        <div className="text-center p-8 relative z-10">
-          <XCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2 text-slate-200">Something went wrong</h2>
-          <p className="text-slate-400 mb-4">{error}</p>
-          <button
-            onClick={() => router.push("/")}
-            className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:shadow-lg hover:shadow-green-500/25 transition-all"
-          >
-            Try again
-          </button>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center p-8 relative z-10">
+            <XCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold mb-2 text-slate-200">Something went wrong</h2>
+            <p className="text-slate-400 mb-4">{error}</p>
+            <button
+              onClick={() => router.push("/")}
+              className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:shadow-lg hover:shadow-green-500/25 transition-all"
+            >
+              Try again
+            </button>
+          </div>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen relative overflow-hidden bg-[#1a1f2e] noise-overlay">
-      <div className="absolute inset-0 dot-pattern opacity-30" />
+    <main className="min-h-screen relative overflow-hidden">
+      <div className="absolute inset-0 bg-[#1a1f2e]/75" />
       <div className="orb orb-1" />
       <div className="orb orb-2" />
       <div className="orb orb-3" />
