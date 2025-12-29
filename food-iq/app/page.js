@@ -32,7 +32,6 @@ const sampleProducts = [
 export default function Home() {
   const [text, setText] = useState("");
   const [isHovered, setIsHovered] = useState(null);
-  const [inputMode, setInputMode] = useState("text"); // "text" or "image"
   const [imagePreview, setImagePreview] = useState(null);
   const [isExtracting, setIsExtracting] = useState(false);
   const [extractError, setExtractError] = useState(null);
@@ -181,150 +180,102 @@ export default function Home() {
           </motion.p>
         </motion.div>
 
-        {/* Main Input Card */}
+        {/* Main Input Card - Simplified, Intent-First */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="premium-card rounded-2xl p-4 sm:p-6 md:p-8 mb-6 sm:mb-8"
         >
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4">
-            <div className="flex items-center gap-3">
-              <motion.div 
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                className="p-2 rounded-lg bg-gradient-to-br from-green-400 to-emerald-500 flex-shrink-0 icon-bounce shadow-lg shadow-green-500/20"
-              >
-                <ScanLine className="w-5 h-5 text-white" />
-              </motion.div>
-              <div>
-                <h2 className="font-semibold text-slate-100 text-sm sm:text-base">What's in your food?</h2>
-                <p className="text-xs sm:text-sm text-slate-400 hidden sm:block">Upload a photo or paste ingredients</p>
-              </div>
-            </div>
-
-            {/* Input mode toggle */}
-            <div className="flex bg-slate-700/50 rounded-lg p-1 self-stretch sm:self-auto border border-white/5">
-              <button
-                onClick={() => setInputMode("text")}
-                className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 sm:py-1.5 rounded-md text-sm font-medium transition-all ${
-                  inputMode === "text"
-                    ? "bg-green-500/20 text-green-300 shadow-sm"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                Text
-              </button>
-              <button
-                onClick={() => setInputMode("image")}
-                className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 sm:py-1.5 rounded-md text-sm font-medium transition-all flex items-center justify-center gap-1 ${
-                  inputMode === "image"
-                    ? "bg-green-500/20 text-green-300 shadow-sm"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                <Camera className="w-4 h-4" />
-                Photo
-              </button>
+          <div className="flex items-center gap-3 mb-4">
+            <motion.div 
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              className="p-2 rounded-lg bg-gradient-to-br from-green-400 to-emerald-500 flex-shrink-0 icon-bounce shadow-lg shadow-green-500/20"
+            >
+              <ScanLine className="w-5 h-5 text-white" />
+            </motion.div>
+            <div>
+              <h2 className="font-semibold text-slate-100 text-sm sm:text-base">Just show me what's in it</h2>
+              <p className="text-xs sm:text-sm text-slate-400">I'll figure out what you need to know</p>
             </div>
           </div>
 
-          <AnimatePresence mode="wait">
-            {inputMode === "text" ? (
+          {/* Unified input - textarea with camera option */}
+          <div className="relative">
+            <textarea
+              placeholder="Paste ingredients here, or tap the camera to snap a photo of the label..."
+              className="w-full p-4 pr-14 rounded-xl border border-white/10 bg-slate-800/50 focus:bg-slate-800/70 focus:border-green-500/40 transition-all resize-none text-slate-100 placeholder:text-slate-500 focus:outline-none glow-input"
+              rows={4}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+            
+            {/* Camera button - inline */}
+            <input
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleImageUpload}
+              ref={fileInputRef}
+              className="hidden"
+            />
+            <motion.button
+              onClick={() => fileInputRef.current?.click()}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              disabled={isExtracting}
+              className="absolute right-3 top-3 p-2.5 rounded-lg bg-slate-700/80 hover:bg-green-500/30 transition-all text-slate-400 hover:text-green-400 disabled:opacity-50"
+              title="Take photo of ingredients"
+            >
+              {isExtracting ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <Camera className="w-5 h-5" />
+              )}
+            </motion.button>
+          </div>
+
+          {/* Image preview - shows below textarea when image is uploaded */}
+          <AnimatePresence>
+            {imagePreview && (
               <motion.div
-                key="text-input"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-3"
               >
-                <textarea
-                  placeholder="Paste ingredient list here... (e.g., Water, sugar, cocoa, emulsifier E322, natural flavors...)"
-                  className="w-full p-4 rounded-xl border border-white/10 bg-slate-800/50 focus:bg-slate-800/70 focus:border-green-500/40 transition-all resize-none text-slate-100 placeholder:text-slate-500 focus:outline-none glow-input"
-                  rows={4}
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="image-input"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-              >
-                <input
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                  onChange={handleImageUpload}
-                  ref={fileInputRef}
-                  className="hidden"
-                />
-
-                {!imagePreview ? (
-                  <div
-                    onClick={() => fileInputRef.current?.click()}
-                    className="w-full p-6 sm:p-8 rounded-xl border-2 border-dashed border-slate-600 bg-slate-800/30 hover:bg-green-500/10 hover:border-green-500/50 transition-all cursor-pointer flex flex-col items-center justify-center gap-3 active:bg-green-500/20"
+                <div className="relative inline-block">
+                  <img
+                    src={imagePreview}
+                    alt="Uploaded ingredient label"
+                    className="rounded-lg object-contain max-h-32 border border-white/10"
+                  />
+                  <button
+                    onClick={clearImage}
+                    className="absolute -top-2 -right-2 p-1.5 bg-red-500/90 rounded-full text-white hover:bg-red-600 transition-colors"
                   >
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-green-500/20 flex items-center justify-center">
-                      <Upload className="w-7 h-7 sm:w-8 sm:h-8 text-green-400" />
-                    </div>
-                    <div className="text-center">
-                      <p className="font-medium text-slate-200 text-sm sm:text-base">Upload ingredient label photo</p>
-                      <p className="text-xs sm:text-sm text-slate-400 mt-1">Tap to take a photo or browse</p>
-                    </div>
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+                {text && !isExtracting && (
+                  <div className="flex items-center gap-2 text-green-400 mt-2">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span className="text-xs">Ingredients extracted from image</span>
                   </div>
-                ) : (
-                  <div className="relative">
-                    <img
-                      src={imagePreview}
-                      alt="Uploaded ingredient label"
-                      className="w-full rounded-xl object-contain max-h-64"
-                    />
-                    {isExtracting && (
-                      <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
-                        <div className="text-center text-white">
-                          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2" />
-                          <p className="text-sm">Reading ingredients...</p>
-                        </div>
-                      </div>
-                    )}
-                    {!isExtracting && (
-                      <button
-                        onClick={clearImage}
-                        className="absolute top-2 right-2 p-2 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                )}
-
-                {extractError && (
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="mt-3 text-sm text-red-600 text-center"
-                  >
-                    {extractError}
-                  </motion.p>
-                )}
-
-                {text && !isExtracting && imagePreview && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-4 p-4 bg-green-500/10 rounded-xl border border-green-500/20"
-                  >
-                    <div className="flex items-center gap-2 text-green-400 mb-2">
-                      <Sparkles className="w-4 h-4" />
-                      <span className="text-sm font-medium">Ingredients extracted!</span>
-                    </div>
-                    <p className="text-sm text-slate-300 line-clamp-3">{text}</p>
-                  </motion.div>
                 )}
               </motion.div>
             )}
           </AnimatePresence>
+
+          {extractError && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="mt-3 text-sm text-red-400"
+            >
+              {extractError}
+            </motion.p>
+          )}
 
           <motion.button
             onClick={handleAnalyze}
@@ -337,8 +288,8 @@ export default function Home() {
                 : "bg-slate-700 cursor-not-allowed text-slate-500"
             }`}
           >
-            <MessageCircle className="w-5 h-5" />
-            Help me understand this
+            <Brain className="w-5 h-5" />
+            Tell me what I need to know
             <motion.div
               animate={{ x: [0, 4, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
@@ -402,7 +353,7 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* Features */}
+        {/* Features - AI-Native Highlights */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -414,11 +365,11 @@ export default function Home() {
             className="text-center p-3 sm:p-6 premium-card rounded-xl cursor-default group"
           >
             <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/25 group-hover:shadow-green-500/40">
-              <Camera className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">Snap & Scan</h3>
+            <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">I Infer Intent</h3>
             <p className="text-xs sm:text-sm text-slate-400 hidden sm:block">
-              Just photograph any label — AI reads it for you
+              No forms — I figure out what you care about
             </p>
           </motion.div>
 
@@ -429,9 +380,9 @@ export default function Home() {
             <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/25 group-hover:shadow-orange-500/40">
               <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">Reasoning</h3>
+            <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">I Decide For You</h3>
             <p className="text-xs sm:text-sm text-slate-400 hidden sm:block">
-              I explain <em>why</em> ingredients matter
+              Not just info — clear recommendations
             </p>
           </motion.div>
 
@@ -442,9 +393,9 @@ export default function Home() {
             <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg shadow-yellow-500/25 group-hover:shadow-yellow-500/40">
               <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">Honest</h3>
+            <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">I'm Honest</h3>
             <p className="text-xs sm:text-sm text-slate-400 hidden sm:block">
-              I tell you when science is mixed
+              I tell you when I'm uncertain
             </p>
           </motion.div>
 
@@ -452,12 +403,12 @@ export default function Home() {
             whileHover={{ scale: 1.05, y: -8, transition: { duration: 0.1 } }}
             className="text-center p-3 sm:p-6 premium-card rounded-xl cursor-default group"
           >
-            <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-red-400 to-rose-500 flex items-center justify-center shadow-lg shadow-red-500/25 group-hover:shadow-red-500/40">
-              <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/25 group-hover:shadow-purple-500/40">
+              <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">Intent-First</h3>
+            <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">I'm Your Co-pilot</h3>
             <p className="text-xs sm:text-sm text-slate-400 hidden sm:block">
-              No forms or filters needed
+              Ask follow-ups, I'll guide you
             </p>
           </motion.div>
         </motion.div>

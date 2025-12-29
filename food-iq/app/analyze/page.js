@@ -95,56 +95,80 @@ function ThinkingAnimation() {
   );
 }
 
-// Verdict badge component
-function VerdictBadge({ verdict }) {
+// Verdict badge component - Now more prominent and decision-focused
+function VerdictBadge({ verdict, confidence }) {
   const config = {
     safe: {
       icon: CheckCircle,
-      bg: "bg-green-500/10",
-      border: "border-green-500/20",
+      bg: "bg-green-500/15",
+      border: "border-green-500/30",
       text: "text-green-400",
-      label: "Generally Fine",
+      label: "Good to go",
+      sublabel: "I'd say this is fine",
     },
     caution: {
       icon: AlertTriangle,
-      bg: "bg-amber-500/10",
-      border: "border-amber-500/20",
+      bg: "bg-amber-500/15",
+      border: "border-amber-500/30",
       text: "text-amber-400",
-      label: "Some Considerations",
+      label: "Worth checking",
+      sublabel: "A few things to consider",
     },
     avoid: {
       icon: XCircle,
-      bg: "bg-red-500/10",
-      border: "border-red-500/20",
+      bg: "bg-red-500/15",
+      border: "border-red-500/30",
       text: "text-red-400",
-      label: "Worth Reconsidering",
+      label: "I'd skip this",
+      sublabel: "Better alternatives exist",
     },
     mixed: {
       icon: Scale,
-      bg: "bg-orange-500/10",
-      border: "border-orange-500/20",
+      bg: "bg-orange-500/15",
+      border: "border-orange-500/30",
       text: "text-orange-400",
-      label: "Mixed Picture",
+      label: "It depends",
+      sublabel: "Context matters here",
     },
   };
 
+  const confidenceConfig = {
+    high: { label: "High confidence", color: "text-green-400" },
+    medium: { label: "Moderate confidence", color: "text-amber-400" },
+    low: { label: "Lower confidence", color: "text-slate-400" },
+  };
+
   const c = config[verdict] || config.mixed;
+  const conf = confidenceConfig[confidence] || confidenceConfig.medium;
   const Icon = c.icon;
 
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.05, transition: { duration: 0.1 } }}
-      className={`inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1 sm:py-2 rounded-full ${c.bg} ${c.border} border verdict-badge backdrop-blur-sm shadow-lg`}
+      className="flex flex-col items-end gap-1"
     >
       <motion.div
-        animate={{ scale: [1, 1.2, 1] }}
-        transition={{ repeat: Infinity, duration: 2 }}
+        whileHover={{ scale: 1.05, transition: { duration: 0.1 } }}
+        className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full ${c.bg} ${c.border} border-2 verdict-badge backdrop-blur-sm shadow-lg`}
       >
-        <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${c.text}`} />
+        <motion.div
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        >
+          <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${c.text}`} />
+        </motion.div>
+        <div className="flex flex-col">
+          <span className={`font-bold text-sm sm:text-base ${c.text}`}>{c.label}</span>
+          <span className="text-xs text-slate-400 hidden sm:block">{c.sublabel}</span>
+        </div>
       </motion.div>
-      <span className={`font-semibold text-xs sm:text-sm ${c.text}`}>{c.label}</span>
+      {confidence && (
+        <span className={`text-xs ${conf.color} flex items-center gap-1`}>
+          <span className="w-1.5 h-1.5 rounded-full bg-current" />
+          {conf.label}
+        </span>
+      )}
     </motion.div>
   );
 }
@@ -197,7 +221,7 @@ function InsightCard({ icon: Icon, title, items, color = "purple", delay = 0 }) 
   );
 }
 
-// Uncertainty indicator
+// Uncertainty indicator - More visible and honest
 function UncertaintyIndicator({ items }) {
   if (!items || items.length === 0) return null;
 
@@ -206,33 +230,33 @@ function UncertaintyIndicator({ items }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 }}
-      className="premium-card rounded-xl sm:rounded-2xl p-4 sm:p-6"
+      className="premium-card rounded-xl sm:rounded-2xl p-4 sm:p-6 border-l-4 border-l-slate-500/50"
     >
       <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
         <motion.div 
           animate={{ rotate: [0, 10, -10, 0] }}
           transition={{ repeat: Infinity, duration: 4 }}
-          className="p-1.5 sm:p-2 rounded-lg bg-slate-700/80 shadow-inner"
+          className="p-1.5 sm:p-2 rounded-lg bg-slate-600/50 shadow-inner"
         >
           <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5 text-slate-300" />
         </motion.div>
         <div>
-          <h3 className="font-semibold text-slate-200 text-sm sm:text-base">What I'm less certain about</h3>
-          <p className="text-xs text-slate-500 hidden sm:block">Transparency about limitations</p>
+          <h3 className="font-semibold text-slate-200 text-sm sm:text-base">Being honest with you...</h3>
+          <p className="text-xs text-slate-400 hidden sm:block">Where I'm less certain or evidence is mixed</p>
         </div>
       </div>
 
-      <ul className="space-y-2">
+      <ul className="space-y-3">
         {items.map((item, i) => (
           <motion.li
             key={i}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 + i * 0.1 }}
-            className="text-sm text-slate-300 flex items-start gap-2"
+            className="text-sm text-slate-300 flex items-start gap-3 p-2 rounded-lg bg-slate-700/30"
           >
-            <Info className="w-4 h-4 text-slate-500 mt-0.5 flex-shrink-0" />
-            {item}
+            <Info className="w-4 h-4 text-amber-400/70 mt-0.5 flex-shrink-0" />
+            <span>{item}</span>
           </motion.li>
         ))}
       </ul>
@@ -493,26 +517,26 @@ export default function AnalyzePage() {
             <span className="sm:hidden">Back</span>
           </motion.button>
 
-          {data?.verdict && <VerdictBadge verdict={data.verdict} />}
+          {data?.verdict && <VerdictBadge verdict={data.verdict} confidence={data.confidence} />}
         </motion.div>
 
-        {/* Inferred Intent */}
+        {/* Inferred Intent - More prominent */}
         {data?.intent && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 sm:mb-8 premium-card p-4 rounded-xl"
+            className="mb-6 sm:mb-8 premium-card p-4 sm:p-5 rounded-xl border-l-4 border-l-amber-500/50"
           >
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 mb-1 sm:mb-2">
+            <div className="flex items-center gap-2 text-xs sm:text-sm text-amber-400/80 mb-1 sm:mb-2">
               <motion.div
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ repeat: Infinity, duration: 2 }}
               >
-                <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
+                <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
               </motion.div>
-              <span>What I think you're wondering about</span>
+              <span className="font-medium">What I inferred you care about</span>
             </div>
-            <p className="text-lg sm:text-xl font-medium text-slate-200">{data.intent}</p>
+            <p className="text-base sm:text-lg font-medium text-slate-200">{data.intent}</p>
           </motion.div>
         )}
 
