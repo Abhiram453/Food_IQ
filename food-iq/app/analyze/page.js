@@ -135,7 +135,7 @@ function VerdictBadge({ verdict }) {
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.05 }}
+      whileHover={{ scale: 1.05, transition: { duration: 0.1 } }}
       className={`inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1 sm:py-2 rounded-full ${c.bg} ${c.border} border verdict-badge backdrop-blur-sm shadow-lg`}
     >
       <motion.div
@@ -164,13 +164,13 @@ function InsightCard({ icon: Icon, title, items, color = "purple", delay = 0 }) 
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.01, y: -2 }}
+      whileHover={{ scale: 1.01, y: -2, transition: { duration: 0.1 } }}
       transition={{ delay }}
-      className="premium-card rounded-xl sm:rounded-2xl p-4 sm:p-6 hover-lift"
+      className="premium-card rounded-xl sm:rounded-2xl p-4 sm:p-6"
     >
       <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
         <motion.div 
-          whileHover={{ rotate: [0, -10, 10, 0] }}
+          whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.2 } }}
           className={`p-1.5 sm:p-2 rounded-lg bg-gradient-to-br ${colors[color]} shadow-lg`}
         >
           <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
@@ -246,7 +246,7 @@ function BottomLine({ text, intent }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.01 }}
+      whileHover={{ scale: 1.01, transition: { duration: 0.1 } }}
       transition={{ delay: 0.5 }}
       className="relative overflow-hidden bg-gradient-to-br from-green-600 to-emerald-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white shadow-xl shadow-green-500/20"
     >
@@ -318,10 +318,10 @@ function FollowUpChat({ onAsk, answer, isLoading }) {
             onClick={() => setQuestion(s)}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 + i * 0.1 }}
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            className="text-xs px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full glass-btn text-slate-300 hover:text-green-300 transition-colors"
+            transition={{ delay: 0.7 + i * 0.1, type: "tween", duration: 0.2 }}
+            whileHover={{ scale: 1.05, y: -2, transition: { duration: 0.1 } }}
+            whileTap={{ scale: 0.95, transition: { duration: 0.05 } }}
+            className="text-xs px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-green-300 hover:border-green-500/30 hover:bg-white/10"
           >
             {s}
           </motion.button>
@@ -340,9 +340,9 @@ function FollowUpChat({ onAsk, answer, isLoading }) {
         <motion.button
           type="submit"
           disabled={!question.trim() || isLoading}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl hover:shadow-green-500/30 active:opacity-90 transition-all ripple"
+          whileHover={{ scale: 1.05, transition: { duration: 0.1 } }}
+          whileTap={{ scale: 0.95, transition: { duration: 0.05 } }}
+          className="px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? (
             <Loader2 className="w-5 h-5 animate-spin" />

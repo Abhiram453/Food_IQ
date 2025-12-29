@@ -374,9 +374,9 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + index * 0.1 }}
-                whileHover={{ scale: 1.03, y: -4 }}
-                whileTap={{ scale: 0.98 }}
-                className="premium-card p-3 sm:p-4 rounded-xl text-left group cursor-pointer ripple"
+                whileHover={{ scale: 1.03, y: -4, transition: { duration: 0.1 } }}
+                whileTap={{ scale: 0.98, transition: { duration: 0.05 } }}
+                className="premium-card p-3 sm:p-4 rounded-xl text-left group cursor-pointer"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
@@ -410,16 +410,12 @@ export default function Home() {
           className="mt-10 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-6"
         >
           <motion.div 
-            whileHover={{ scale: 1.05, y: -8 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            className="text-center p-3 sm:p-6 premium-card rounded-xl hover-lift cursor-default group"
+            whileHover={{ scale: 1.05, y: -8, transition: { duration: 0.1 } }}
+            className="text-center p-3 sm:p-6 premium-card rounded-xl cursor-default group"
           >
-            <motion.div 
-              whileHover={{ rotate: [0, -10, 10, 0] }}
-              className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/25 group-hover:shadow-green-500/40 transition-shadow"
-            >
+            <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/25 group-hover:shadow-green-500/40">
               <Camera className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-            </motion.div>
+            </div>
             <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">Snap & Scan</h3>
             <p className="text-xs sm:text-sm text-slate-400 hidden sm:block">
               Just photograph any label — AI reads it for you
@@ -427,16 +423,12 @@ export default function Home() {
           </motion.div>
 
           <motion.div 
-            whileHover={{ scale: 1.05, y: -8 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            className="text-center p-3 sm:p-6 premium-card rounded-xl hover-lift cursor-default group"
+            whileHover={{ scale: 1.05, y: -8, transition: { duration: 0.1 } }}
+            className="text-center p-3 sm:p-6 premium-card rounded-xl cursor-default group"
           >
-            <motion.div 
-              whileHover={{ rotate: [0, -10, 10, 0] }}
-              className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/25 group-hover:shadow-orange-500/40 transition-shadow"
-            >
+            <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/25 group-hover:shadow-orange-500/40">
               <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-            </motion.div>
+            </div>
             <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">Reasoning</h3>
             <p className="text-xs sm:text-sm text-slate-400 hidden sm:block">
               I explain <em>why</em> ingredients matter
@@ -444,16 +436,12 @@ export default function Home() {
           </motion.div>
 
           <motion.div 
-            whileHover={{ scale: 1.05, y: -8 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            className="text-center p-3 sm:p-6 premium-card rounded-xl hover-lift cursor-default group"
+            whileHover={{ scale: 1.05, y: -8, transition: { duration: 0.1 } }}
+            className="text-center p-3 sm:p-6 premium-card rounded-xl cursor-default group"
           >
-            <motion.div 
-              whileHover={{ rotate: [0, -10, 10, 0] }}
-              className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg shadow-yellow-500/25 group-hover:shadow-yellow-500/40 transition-shadow"
-            >
+            <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg shadow-yellow-500/25 group-hover:shadow-yellow-500/40">
               <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-            </motion.div>
+            </div>
             <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">Honest</h3>
             <p className="text-xs sm:text-sm text-slate-400 hidden sm:block">
               I tell you when science is mixed
@@ -461,16 +449,12 @@ export default function Home() {
           </motion.div>
 
           <motion.div 
-            whileHover={{ scale: 1.05, y: -8 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            className="text-center p-3 sm:p-6 premium-card rounded-xl hover-lift cursor-default group"
+            whileHover={{ scale: 1.05, y: -8, transition: { duration: 0.1 } }}
+            className="text-center p-3 sm:p-6 premium-card rounded-xl cursor-default group"
           >
-            <motion.div 
-              whileHover={{ rotate: [0, -10, 10, 0] }}
-              className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-red-400 to-rose-500 flex items-center justify-center shadow-lg shadow-red-500/25 group-hover:shadow-red-500/40 transition-shadow"
-            >
+            <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-red-400 to-rose-500 flex items-center justify-center shadow-lg shadow-red-500/25 group-hover:shadow-red-500/40">
               <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-            </motion.div>
+            </div>
             <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-base text-slate-200">Intent-First</h3>
             <p className="text-xs sm:text-sm text-slate-400 hidden sm:block">
               No forms or filters needed
